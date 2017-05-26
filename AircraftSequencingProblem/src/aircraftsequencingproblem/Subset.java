@@ -6,27 +6,28 @@ package aircraftsequencingproblem;
  */
 public class Subset {
 
-    private int size;
-    private Airplane[] plane = new Airplane[0];
+    private Airplane[] plane;
 
-    public Subset(Airplane[] plane) {
-        size = 0;
-        this.plane = plane;
+    public Subset(int size) {
+        plane = new Airplane[size];
     }
 
-    public void insertAirplane(Airplane a) {
-        Airplane[] temp = new Airplane[plane.length + 1];
-        System.arraycopy(plane, 0, temp, 0, plane.length);
-        temp[plane.length] = a;
-        plane = temp;
-        size++;
+    public void insertAirplanes(Airplane p, int i) {
+        this.plane[i] = p;
     }
-    
+
     public Airplane[] getAirplane() {
         return plane;
     }
 
-    public int getSize() {
-        return size;
+    public void printSubset() {
+        for (int i = 0; i < plane.length; i++) {
+            String[] temp = plane[i].getAirplane();
+            System.out.print(i + ": ");
+            for (String temp1 : temp) {
+                System.out.print(temp1 + "   ");
+            }
+            System.out.println();
+        }
     }
 }

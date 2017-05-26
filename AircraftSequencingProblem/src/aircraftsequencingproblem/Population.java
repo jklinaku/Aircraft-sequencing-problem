@@ -11,41 +11,52 @@ package aircraftsequencingproblem;
  */
 public class Population {
 
-    private int[] ndarja = new int[0];
-    private Airplane[] airplane;
-    private Subset[] subset;
+    private final Airplane[] airplane;
+    private Subset[] subset = new Subset[0];
 
     public Population(Airplane[] airplane) {
         this.airplane = airplane;
-        int sa = howMany();
-        this.subset = new Subset[sa];
     }
 
-    public void populationCreator() {
-        for (int i = 0; i < subset.length-1; i++) {
-            insert(subset[i], ndarja, i);
+    public void populationCreator(int[] n) {
+        int index = 0;
+        subset = new Subset[n.length - 1];
+        subsetCreator(subset, n);
+        for (int i = 0; i < subset.length; i++) {
+            for (int j = 0; j < n[i + 1] - n[i]; j++) {
+                subset[i].insertAirplanes(airplane[index], j);
+                index++;
+            }
         }
     }
 
-    private int howMany() {
+    public void subsetCreator(Subset[] s, int[] n) {
+        for (int i = 0; i < s.length; i++) {
+            s[i] = new Subset(n[i + 1] - n[i]);
+        }
+    }
+
+    public int howMany() {
         int answer = 0;
         for (int i = 0; i < airplane.length; i++) {
             if (airplane[i].getTime() == airplane[i].getOTime()) {
-                int[] temp = new int[ndarja.length + 1];
-                temp[ndarja.length] = i;
-                ndarja = temp;
                 answer++;
             }
         }
         return answer;
     }
 
-    public void insert(Subset s, int[] ndajra, int index) {
-        int start = ndarja[index];
-        int finish = ndarja[index + 1];
-        for (int i = start; i < finish; i++) {
-            s.insertAirplane(airplane[i]);
+    public int[] fragments() {
+        int[] answer = new int[howMany() + 1];
+        int index = 0;
+        for (int i = 0; i < airplane.length; i++) {
+            if (airplane[i].getTime() == airplane[i].getOTime()) {
+                answer[index] = i;
+                index++;
+            }
         }
+        answer[howMany()] = airplane.length;
+        return answer;
     }
 
     public Subset[] getSubset() {

@@ -23,72 +23,23 @@ public class AircraftSequencingProblem {
         FIFO f = new FIFO();
         Workbook wb = new HSSFWorkbook();
         //for (int k = 0; k < 12; k++) {
-        String[][] a = new ReadAndWrite().readFile("ara.xls", 0);
+        String[][] a = new ReadAndWrite().readFile("ara.xls", 7);
         Airplane[] airplane = new Airplane[a.length];
         for (int i = 0; i < airplane.length; i++) {
             airplane[i] = new Airplane(a[i]);
         }
-        Modify m = new Modify(airplane);
         f.fifo(airplane);
-        System.out.println(m.generateIndex());
-        System.out.println(0 + ":   " + f.penalty(airplane));;
         Population p = new Population(airplane);
-        p.populationCreator();
+        int[] d = p.fragments();
+        p.populationCreator(d);
         Subset[] s = p.getSubset();
         for (int i = 0; i < s.length; i++) {
-            Airplane[] temp = s[i].getAirplane();
-            System.out.println("Subset" + (i + 1));
-            for (int j = 0; j < temp.length; j++) {
-                String[] tempp = temp[j].getAirplane();
-                for (int k = 0; k < tempp.length; k++) {
-                    System.out.print(tempp[k] + "\t\t");
-                }
-            }
+            System.out.println("Subset: " + i);
+            s[i].printSubset();
         }
         for (int j = 0; j < a.length; j++) {
             a[j] = airplane[j].getAirplane();
         }
         new ReadAndWrite().writeFile(a, "Joni.xls", wb);
-
-        //wb.close();
     }
 }
-//        String file = "ara.xls";
-//        try {
-//    POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
-//    HSSFWorkbook wb = new HSSFWorkbook(fs);
-//    HSSFSheet sheet = wb.getSheetAt(0);
-//    HSSFRow row;
-//    HSSFCell cell;
-//
-//    int rows; // No of rows
-//    rows = sheet.getPhysicalNumberOfRows();
-//
-//    int cols = 0; // No of columns
-//    int tmp = 0;
-//
-//    // This trick ensures that we get the data properly even if it doesn't start from first few rows
-//    for(int i = 0; i < 10 || i < rows; i++) {
-//        row = sheet.getRow(i);
-//        if(row != null) {
-//            tmp = sheet.getRow(i).getPhysicalNumberOfCells();
-//            if(tmp > cols) cols = tmp;
-//        }
-//    }
-//
-//    for(int r = 0; r < rows; r++) {
-//        row = sheet.getRow(r);
-//        if(row != null) {
-//            for(int c = 0; c < cols; c++) {
-//                cell = row.getCell((short)c);
-//                if(cell != null) {
-//                    // Your code here
-//                    System.out.print(cell + "\t\t");
-//                }
-//            }
-//        }
-//        System.out.println();
-//    }
-//} catch(Exception ioe) {
-//    ioe.printStackTrace();
-//}
