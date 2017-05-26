@@ -64,6 +64,7 @@ public class AircraftSequencingProblem {
             currentSolution.update();
             int currentEnergy = currentSolution.fitness();
             best.update();
+            int fitness =best.fitness();
 //            for(int k=0;k<best.size();k++){
 //                
 //                
@@ -77,13 +78,21 @@ public class AircraftSequencingProblem {
             if (acceptanceProbability(currentEnergy, neighbourEnergy, temp) > Math.random()) {
                 
                 currentSolution = new AirplaneList(newSolution.getAirplanes());
+                currentSolution.update();
             }
-            
-            if (currentSolution.fitness() < best.fitness()) {
+                if (currentSolution.fitness() < fitness) {
                 System.out.println("best");
-                processing=false;
+                processing=true;
                 best = new AirplaneList(currentSolution.getAirplanes());
+                Airplane[] airplane = best.getAirplanes();
+             // FIFO.fifo(airplane);
+                for (int j = 0; j < a.length; j++) {
+                    a[j] = airplane[j].getAirplane();
+                  }
+        
+        new ReadAndWrite().writeFile(a, "Joni.xls", wb);
             }
+        
             
             temp *= 1 - coolingRate;
         }
@@ -101,12 +110,6 @@ public class AircraftSequencingProblem {
 //            System.out.println("Subset: " + i);
 //            s[i].printSubset();
 //        }
-        Airplane[] airplane = best.getAirplanes();
-       // FIFO.fifo(airplane);
-        for (int j = 0; j < a.length; j++) {
-            a[j] = airplane[j].getAirplane();
-        }
         
-        new ReadAndWrite().writeFile(a, "Joni.xls", wb);
     }
 }
