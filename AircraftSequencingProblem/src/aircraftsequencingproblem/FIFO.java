@@ -11,20 +11,26 @@ package aircraftsequencingproblem;
  */
 public class FIFO {
 
-    public void fifo(Airplane[] a) {
+    public  void fifo(Airplane[] a) {
         Constraints s = new Constraints(a.length);
         a[0].setOTime(a[0].getTime());
-        s.setT(a[0], 0);
+        s.sett(s.timeAdder(a[0].getType(), a[0].getOTime()));
         for (int i = 1; i < a.length; i++) {
-            s.setTime(a[i], i);
+            s.setTime(a[i]);
         }
     }
 
-    public int penalty(Airplane[] a) {
+    public  int penalty(Airplane a) {
+        return (a.getOTime() - a.getTime()) * a.getWeight();
+    }
+
+    public  int penalty(Airplane[] a) {
         int ans = 0;
-        for (Airplane a1 : a) {
-            ans += Math.abs(a1.getTime() - a1.getOTime()) * a1.getWeight();
+        for (int i = 0; i < a.length; i++) {
+            ans += (a[i].getOTime() - a[i].getTime()) * a[i].getWeight();
         }
         return ans;
     }
+
+   
 }

@@ -14,32 +14,99 @@ import org.apache.poi.ss.usermodel.Workbook;
  * @author Sead Mejzini
  */
 public class AircraftSequencingProblem {
+    private static double acceptanceProbability(int energy, int newEnergy, double temperature)
+    {
+        if (newEnergy < energy) {
+            return 1.0;
+        }
+        return Math.exp((energy - newEnergy)/temperature);
+    }
+
 
     /**
      * @param args the command line arguments
      * @throws java.io.IOException
      */
+    
     public static void main(String[] args) throws IOException {
-        FIFO f = new FIFO();
+//        double temp = 10000;
+//        double coolingRate = 0.003;
+        
+        
+        
         Workbook wb = new HSSFWorkbook();
         //for (int k = 0; k < 12; k++) {
         String[][] a = new ReadAndWrite().readFile("ara.xls", 7);
-        Airplane[] airplane = new Airplane[a.length];
-        for (int i = 0; i < airplane.length; i++) {
-            airplane[i] = new Airplane(a[i]);
+        
+        
+        AirplaneList best= new AirplaneList(a.length, a);
+        boolean processing=true;
+        while(processing){
+            AirplaneList currentSolution= new AirplaneList(a.length, a);
+            
+            double temp = 10000;
+        double coolingRate = 0.003;
+        while(temp > 1)
+        {
+            AirplaneList newSolution = new AirplaneList(currentSolution.getAirplanes());
+            int Pos1 = (int) (newSolution.size()*Math.random());
+            int Pos2 = (int) (newSolution.size()*Math.random());
+            
+            Airplane Airplaneswap1 = newSolution.getAirplane(Pos1);
+            Airplane Airplaneswap2 = newSolution.getAirplane(Pos2);
+            
+            
+            newSolution.setAirplane(Pos2, Airplaneswap1);
+            newSolution.setAirplane(Pos1, Airplaneswap2);
+            
+            newSolution.update();
+            int neighbourEnergy = newSolution.fitness();
+            currentSolution.update();
+            int currentEnergy = currentSolution.fitness();
+            best.update();
+//            for(int k=0;k<best.size();k++){
+//                
+//                
+//                System.out.println(newSolution.getAirplane(k).getTime()+" "+newSolution.getAirplane(k).getOTime()+" "+k+" "+currentSolution.getAirplane(k).getTime()+" "+currentSolution.getAirplane(k).getOTime());
+//            }
+            
+            
+//            System.out.println(currentEnergy-neighbourEnergy);
+            
+            
+            if (acceptanceProbability(currentEnergy, neighbourEnergy, temp) > Math.random()) {
+                
+                currentSolution = new AirplaneList(newSolution.getAirplanes());
+            }
+            
+            if (currentSolution.fitness() < best.fitness()) {
+                System.out.println("best");
+                processing=false;
+                best = new AirplaneList(currentSolution.getAirplanes());
+            }
+            
+            temp *= 1 - coolingRate;
         }
-        f.fifo(airplane);
-        Population p = new Population(airplane);
-        int[] d = p.fragments();
-        p.populationCreator(d);
-        Subset[] s = p.getSubset();
-        for (int i = 0; i < s.length; i++) {
-            System.out.println("Subset: " + i);
-            s[i].printSubset();
         }
+        
+        
+        
+        
+        
+//        Population p = new Population(airplane);
+//        int[] d = p.fragments();
+//        p.populationCreator(d);
+//        Subset[] s = p.getSubset();
+//        for (int i = 0; i < s.length; i++) {
+//            System.out.println("Subset: " + i);
+//            s[i].printSubset();
+//        }
+        Airplane[] airplane = best.getAirplanes();
+       // FIFO.fifo(airplane);
         for (int j = 0; j < a.length; j++) {
             a[j] = airplane[j].getAirplane();
         }
+        
         new ReadAndWrite().writeFile(a, "Joni.xls", wb);
     }
 }
