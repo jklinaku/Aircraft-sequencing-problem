@@ -7,12 +7,13 @@ package aircraftsequencingproblem;
 
 /**
  *
- * @author Sead Mejzini
+ * @author Jon Klinaku
  */
 public class Airplane {
 
     private final String[] airplane;
     private int OTime;
+    private int deadLine;
 
 
 
@@ -27,20 +28,33 @@ public class Airplane {
         return temp;
     }
 
-    public int getWeight() {
-        return (int) Double.parseDouble(airplane[5]);
-    }
+//    public int getWeight() {
+//        return (int) Double.parseDouble(airplane[5]);
+//    }
 
-    public int getTime() {
-        return (int) Double.parseDouble(airplane[4]);
+//    public int getTime() {
+//        return (int) Double.parseDouble(airplane[4]);
+//    }
+ public int getTime() {
+        return (int) Double.parseDouble(airplane[1]);
     }
-
-    public String getType() {
-        return airplane[2];
-    }
-
-    public void setOTime(int OTime) {
+//    public String getTravelType(){
+//    return airplane[2];
+//    }
+//    public String getType() {
+//        return airplane[2];
+//    }
+//metoda e meposhtme kerkon modifikim!
+    public boolean setOTime(int OTime) {
+        
+        
+//        if(OTime>deadLine)
+//            return false;
         this.OTime = OTime;
+        return true;
+    }
+    public int getAirplaneClass(){
+        return (int)Double.parseDouble(airplane[2]);
     }
 
     private String airplaneName() {

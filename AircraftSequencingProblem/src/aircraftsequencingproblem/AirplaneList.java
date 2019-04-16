@@ -11,7 +11,8 @@ package aircraftsequencingproblem;
  */
 public class AirplaneList {
 Airplane[] airplanes ;
-FIFO f= new FIFO();
+Airplane[] airplanes2 ;
+//FIFO f= new FIFO();
     public AirplaneList(Airplane[] airplanes) {
         this.airplanes = airplanes.clone();
         //FIFO.fifo(airplanes);
@@ -26,17 +27,17 @@ FIFO f= new FIFO();
     }
 
     public void update(){
-       f.fifo(airplanes);
+      // f.fifo(airplanes);
     }
     public void setAirplane(int pos,Airplane a){
         
         airplanes[pos]=a;
         
     }
-    public int fitness(){
-    
-     return f.penalty(airplanes);
-    }
+//    public int fitness(){
+//    
+//     return f.penalty(airplanes);
+//    }
     public int size(){
         return airplanes.length;
     }
