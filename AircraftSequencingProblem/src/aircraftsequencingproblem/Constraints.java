@@ -23,11 +23,11 @@ import java.util.stream.Stream;
 public class Constraints {
 
     //private int[][] T;
-    public int t=0;
-    public static int[][][] tables;
-    private int[][] table1;
-    private int[][] table2;
-    public Constraints(int[][][] tables) {
+    private int t=0;
+    protected static int[][][] tables;
+//    private int[][] table1;
+//    private int[][] table2;
+    public Constraints() {
         //T = new int[n][2];
        // table1=tables[0];
       //  table2=tables[1];
@@ -38,17 +38,22 @@ public class Constraints {
     
     
     
-    public boolean setTime(Airplane a, Airplane b, Airplane aPrev){
+    public boolean setTime(Airplane a, Airplane b, Airplane[] aPrev){
        int tempTime=t;
         if(!Objects.isNull(b))
         {
             int temp;
-            temp=b.getOTime()+tables[1][a.getAirplaneClass()-1][b.getAirplaneClass()-1];
+            temp=b.getOTime()+tables[1][b.getAirplaneClass()-1][a.getAirplaneClass()-1];
             if(temp>tempTime)
                 tempTime=temp;
         }
         if(!Objects.isNull(aPrev)){
-            int temp=aPrev.getOTime()+tables[0][a.getAirplaneClass()-1][aPrev.getAirplaneClass()-1];
+            int temp=aPrev[0].getOTime()+tables[0][aPrev[0].getAirplaneClass()-1][a.getAirplaneClass()-1];
+            for (int i = 1; i < aPrev.length; i++) {
+                if(temp<aPrev[i].getOTime()+tables[0][aPrev[i].getAirplaneClass()-1][a.getAirplaneClass()-1])
+                     temp=aPrev[i].getOTime()+tables[0][aPrev[i].getAirplaneClass()-1][a.getAirplaneClass()-1];
+            }
+           // int temp=aPrev.getOTime()+tables[0][a.getAirplaneClass()-1][aPrev.getAirplaneClass()-1];
             if(temp>tempTime)
                 tempTime=temp;
                 
